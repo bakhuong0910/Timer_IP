@@ -1,0 +1,64 @@
+# //  Questa Intel Starter FPGA Edition-64
+# //  Version 2023.3 linux_x86_64 Jul 17 2023
+# //
+# //  Copyright 1991-2023 Mentor Graphics Corporation
+# //  All Rights Reserved.
+# //
+# //  QuestaSim and its associated documentation contain trade
+# //  secrets and commercial or financial information that are the property of
+# //  Mentor Graphics Corporation and are privileged, confidential,
+# //  and exempt from disclosure under the Freedom of Information Act,
+# //  5 U.S.C. Section 552. Furthermore, this information
+# //  is prohibited from disclosure under the Trade Secrets Act,
+# //  18 U.S.C. Section 1905.
+# //
+# vsim.wlf opened as dataset "vsim"
+# add wave vsim:/test_bench/*
+#  radix -decimal
+# decimal
+# 
+# stdin: <EOF>
+# ExpandPortVecFormal: hdl to offset failed Unable to find HDL name for /test_bench/u_top/tim_pwdata>0<: ** UI-Msg (Error): (vish-4014) No objects found matching '/test_bench/u_top/tim_pwdata'.
+#  
+# ExpandPortVecFormal: hdl to offset failed Unable to find HDL name for /test_bench/u_top/tim_pstrb>0<: ** UI-Msg (Error): (vish-4014) No objects found matching '/test_bench/u_top/tim_pstrb'.
+#  
+# ExpandPortVecFormal: hdl to offset failed Unable to find HDL name for /test_bench/u_top/tim_paddr>0<: ** UI-Msg (Error): (vish-4014) No objects found matching '/test_bench/u_top/tim_paddr'.
+#  
+# ExpandPortVecFormal: hdl to offset failed Unable to find HDL name for /test_bench/u_top/tim_prdata>0<: ** UI-Msg (Error): (vish-4014) No objects found matching '/test_bench/u_top/tim_prdata'.
+#  
+# ExpandPortVecFormal: hdl to offset failed Unable to find HDL name for /test_bench/u_top/tim_pwdata>0<: ** UI-Msg (Error): (vish-4014) No objects found matching '/test_bench/u_top/tim_pwdata'.
+#  
+# ExpandPortVecFormal: hdl to offset failed Unable to find HDL name for /test_bench/u_top/tim_pstrb>0<: ** UI-Msg (Error): (vish-4014) No objects found matching '/test_bench/u_top/tim_pstrb'.
+#  
+# ExpandPortVecFormal: hdl to offset failed Unable to find HDL name for /test_bench/u_top/tim_paddr>0<: ** UI-Msg (Error): (vish-4014) No objects found matching '/test_bench/u_top/tim_paddr'.
+#  
+# ExpandPortVecFormal: hdl to offset failed Unable to find HDL name for /test_bench/u_top/tim_prdata>0<: ** UI-Msg (Error): (vish-4014) No objects found matching '/test_bench/u_top/tim_prdata'.
+#  
+# ExpandPortVecFormal: hdl to offset failed Unable to find HDL name for /test_bench/u_top/u_apb_slave/pwdata>0<: ** UI-Msg (Error): (vish-4014) No objects found matching '/test_bench/u_top/u_apb_slave/pwdata'.
+#  
+# ExpandPortVecFormal: hdl to offset failed Unable to find HDL name for /test_bench/u_top/u_apb_slave/pstrb>0<: ** UI-Msg (Error): (vish-4014) No objects found matching '/test_bench/u_top/u_apb_slave/pstrb'.
+#  
+# ExpandPortVecFormal: hdl to offset failed Unable to find HDL name for /test_bench/u_top/u_apb_slave/paddr>0<: ** UI-Msg (Error): (vish-4014) No objects found matching '/test_bench/u_top/u_apb_slave/paddr'.
+#  
+# ExpandPortVecFormal: hdl to offset failed Unable to find HDL name for /test_bench/u_top/u_apb_slave/div_val>0<: ** UI-Msg (Error): (vish-4014) No objects found matching '/test_bench/u_top/u_apb_slave/div_val'.
+#  
+# ExpandPortVecFormal: hdl to offset failed Unable to find HDL name for /test_bench/u_top/u_register/addr>0<: ** UI-Msg (Error): (vish-4014) No objects found matching '/test_bench/u_top/u_register/addr'.
+#  
+# ExpandPortVecFormal: hdl to offset failed Unable to find HDL name for /test_bench/u_top/u_register/wdata>0<: ** UI-Msg (Error): (vish-4014) No objects found matching '/test_bench/u_top/u_register/wdata'.
+#  
+# ExpandPortVecFormal: hdl to offset failed Unable to find HDL name for /test_bench/u_top/u_register/pstrb>0<: ** UI-Msg (Error): (vish-4014) No objects found matching '/test_bench/u_top/u_register/pstrb'.
+#  
+# ExpandPortVecFormal: hdl to offset failed Unable to find HDL name for /test_bench/u_top/u_register/cnt>0<: ** UI-Msg (Error): (vish-4014) No objects found matching '/test_bench/u_top/u_register/cnt'.
+#  
+# ExpandPortVecFormal: hdl to offset failed Unable to find HDL name for /test_bench/u_top/u_register/rdata>0<: ** UI-Msg (Error): (vish-4014) No objects found matching '/test_bench/u_top/u_register/rdata'.
+#  
+# ExpandPortVecFormal: hdl to offset failed Unable to find HDL name for /test_bench/u_top/u_register/div_val>0<: ** UI-Msg (Error): (vish-4014) No objects found matching '/test_bench/u_top/u_register/div_val'.
+#  
+# ExpandPortVecFormal: hdl to offset failed Unable to find HDL name for /test_bench/u_top/u_register/wdata_counter>0<: ** UI-Msg (Error): (vish-4014) No objects found matching '/test_bench/u_top/u_register/wdata_counter'.
+#  
+# ExpandPortVecFormal: hdl to offset failed Unable to find HDL name for /test_bench/u_top/u_cnt_ctrl/div_val>0<: ** UI-Msg (Error): (vish-4014) No objects found matching '/test_bench/u_top/u_cnt_ctrl/div_val'.
+#  
+# ExpandPortVecFormal: hdl to offset failed Unable to find HDL name for /test_bench/u_top/u_counter/wdata>0<: ** UI-Msg (Error): (vish-4014) No objects found matching '/test_bench/u_top/u_counter/wdata'.
+#  
+# ExpandPortVecFormal: hdl to offset failed Unable to find HDL name for /test_bench/u_top/u_counter/cnt>0<: ** UI-Msg (Error): (vish-4014) No objects found matching '/test_bench/u_top/u_counter/cnt'.
+#  

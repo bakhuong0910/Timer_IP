@@ -1,0 +1,172 @@
+module test_bench; 
+	reg sys_clk,sys_rst_n;
+	reg dbg_mode; 
+	reg [11:0] tim_paddr;
+	reg tim_psel,tim_penable,tim_pwrite;
+	reg [31:0] tim_pwdata;
+	wire [31:0] tim_prdata;
+	reg [3:0] tim_pstrb;
+	wire tim_pready,tim_pslverr,tim_int;
+	integer fail_num;
+
+timer_top u_top(.*);
+`include "run_test.v"
+initial begin 
+	sys_clk =0;
+	forever #25 sys_clk =~sys_clk;
+end
+initial begin 
+	tim_paddr=0;
+	tim_pwdata=0;
+	tim_psel=0;
+	tim_penable=0;
+	tim_pwrite=0;
+	dbg_mode=1;
+	tim_pstrb=4'hf;
+	fail_num=0;
+	#100;	
+	run_test();
+	#100;
+	$finish;
+end
+ task write_reg(input [11:0] addr);
+        begin
+        tim_paddr=addr;
+        tim_psel=1;
+        tim_penable=0;
+        tim_pwrite=1;
+        @(posedge sys_clk);
+        tim_penable=1;
+        repeat(3) @(posedge sys_clk);
+        tim_penable=0;
+        tim_psel=0;
+        tim_pwrite=0;
+        end
+endtask
+task read_reg(input [11:0] addr) ;
+        begin
+        tim_paddr=addr;
+        tim_psel=1;
+        tim_penable=0;
+        @(posedge sys_clk);
+        tim_penable=1;
+        repeat(3) @(posedge sys_clk);
+        tim_psel=0;
+       	tim_penable=0;
+        end
+endtask
+task check_value(input [63:0] label, input [31:0] expected_value, input [31:0] actual_value);
+        begin
+        if(expected_value ==actual_value) begin
+                $display("=========================");
+                $display("PASS: %s: actual value=32'h%h",label,actual_value);
+                $display("=========================");
+        end else begin
+                fail_num=fail_num+1;
+                $display("=========================");
+                $display("FAIL: %s: expected value=32'h%h, actual value=32'h%h",label,expected_value,actual_value);
+                $display("=========================");
+        end
+        end
+endtask
+task error_psel_test(input [11:0] addr);
+        begin 
+        tim_paddr=addr;
+        tim_pwrite=1'b1;
+        tim_psel=0;
+        tim_penable=0;
+        @(posedge sys_clk);
+        tim_penable=1;
+        repeat(3) @(posedge sys_clk);
+        tim_penable=0;
+        tim_psel=0;
+        tim_pwrite=0;
+        end
+endtask
+task read_reg_error(input [11:0] addr);
+        begin
+        tim_paddr=addr;
+        tim_psel=0;
+        tim_penable=0;
+        @(posedge sys_clk);
+        tim_penable=1;
+        repeat(3) @(posedge sys_clk);
+        tim_penable=0;
+        tim_psel=0;
+        tim_pwrite=0;
+        end
+endtask
+task write_reg_penable_error(input [11:0] addr);
+        begin 
+        tim_paddr=addr;
+        tim_pwrite=1'b1;
+        tim_psel=0;
+        tim_penable=0;
+        @(posedge sys_clk);
+        tim_penable=1;
+        repeat(3) @(posedge sys_clk);
+        tim_penable=0;
+        tim_psel=0;
+        tim_pwrite=0;
+        end
+endtask
+task read_penable_error(input [11:0] addr);
+        begin
+        tim_paddr=addr;
+        tim_psel=0;
+        tim_penable=0;
+        @(posedge sys_clk);
+        tim_penable=1;
+        repeat(3) @(posedge sys_clk);
+        tim_penable=0;
+        tim_psel=0;
+        tim_pwrite=0;
+        end
+endtask
+task write_access_idle(input [11:0] addr);
+	begin 
+	tim_paddr=addr;
+	tim_psel=1;
+	tim_penable=0;
+	tim_pwrite=1;
+	@(posedge sys_clk);
+	tim_penable=1;
+	@(posedge sys_clk);
+	tim_psel=0;
+	tim_penable=0;
+	tim_pwrite=0;
+	end
+endtask 
+
+task read_access_idle(input [11:0] addr);
+	begin 
+	tim_paddr=addr;
+	tim_psel=1;
+	tim_penable=0;
+	tim_pwrite=1;
+	@(posedge sys_clk);
+	tim_penable=1;
+	@(posedge sys_clk);
+	tim_psel=0;
+	tim_penable=0;
+	tim_pwrite=0;
+	end
+endtask
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+endmodule
+
+
+

@@ -1,0 +1,204 @@
+module register_file
+(
+	input wire 	clk,
+	input wire	rst_n,
+	input wire 	wr_en,
+	input wire	rd_en, 
+	input wire 	dbg_mode,
+	input wire 	[11:0] addr,
+	input wire 	[31:0] wdata,
+	input wire	[3:0] pstrb,
+        input wire 	int_st,
+	output wire 	halt_req,	
+	input wire 	[63:0] cnt,
+	output wire 	int_set,
+	output wire	[31:0] rdata, 
+	output wire 	int_en,
+	output wire	int_clr,
+	output wire	[3:0] div_val,
+	output wire 	div_en,
+	output wire	timer_en,
+	output wire 	tdr1_wr_sel,
+	output wire 	tdr0_wr_sel,
+	output wire 	[31:0] wdata_counter 
+);
+//------------------khai bao thanh ghi ------------------------
+reg [31:0] TDR0;
+reg [31:0] TDR1;
+reg [31:0] TCMP0;
+reg [31:0] TCMP1; 
+reg 	   TIER;
+localparam TIER_ADDR=12'h014;
+localparam TISR_ADDR=12'h018;
+localparam THCSR_ADDR=12'h01C;
+localparam TCR_ADDR=12'h00;
+localparam TDR0_ADDR=12'h04;
+localparam TDR1_ADDR=12'h08;
+localparam TCMP0_ADDR = 12'h0C;
+localparam TCMP1_ADDR = 12'h10;
+//wire halt_ack;
+//-----------------------------pstrb--------------------------
+wire [31:0] byte_mask={{8{pstrb[3]}},{8{pstrb[2]}},{8{pstrb[1]}},{8{pstrb[0]}}};
+wire [31:0] mask=byte_mask&((addr==TCR_ADDR) ? 32'h0000_0F03:
+			       (addr==TIER_ADDR)? 32'h0000_0001:
+			       (addr==TISR_ADDR)? 32'h0000_0001:
+			       (addr==THCSR_ADDR)? 32'h0000_0001:32'hffff_ffff);
+//---------------------------write to register --------------
+wire wr_tcr		=	wr_en 	&&(addr==TCR_ADDR);
+assign tdr0_wr_sel	=	wr_en 	&&(addr==TDR0_ADDR);
+assign tdr1_wr_sel	=	wr_en 	&&(addr==TDR1_ADDR);
+wire wr_tcmp0		= 	wr_en 	&&(addr==TCMP0_ADDR);
+wire wr_tcmp1		= 	wr_en 	&&(addr==TCMP1_ADDR);
+wire wr_tisr		=	wr_en	&&(addr==TISR_ADDR);
+wire wr_tier		=	wr_en 	&&(addr==TIER_ADDR);
+wire wr_thcsr		=	wr_en	&&(addr==THCSR_ADDR);
+//----------------------------------TDR-----------------------
+reg [31:0] tdr0_pre;
+always @(*) begin 
+	tdr0_pre=TDR0;
+	if(tdr0_wr_sel) begin 
+		tdr0_pre=((wdata & mask) | (TDR0 & ~mask));
+	end
+end
+reg [31:0] tdr1_pre;
+always @(*) begin 
+	tdr1_pre=TDR1;
+	if(tdr1_wr_sel) begin 
+		tdr1_pre=((wdata & mask) |(TDR1 & ~mask));
+	end
+end
+
+assign wdata_counter= (tdr0_wr_sel==1)? tdr0_pre: (tdr1_wr_sel==1)? tdr1_pre:32'h0000_0000;
+//-----------------------------------TCR-----------------------
+reg [3:0] div_val_pre_reg;
+reg [3:0] tcr_div_val;
+reg tcr_div_en,tcr_timer_en;
+reg div_en_pre,timer_en_pre;
+always @(*) begin 
+	div_val_pre_reg	=tcr_div_val;
+	div_en_pre	=tcr_div_en;
+	timer_en_pre	=tcr_timer_en;
+	if(wr_tcr) begin 
+		div_val_pre_reg	=(wdata[11:8] & mask[11:8]) | (tcr_div_val & ~mask[11:8]);
+		div_en_pre	=(wdata[1] & mask[1])	     | (tcr_div_en  & ~mask[1]);
+		timer_en_pre	=(wdata[0] & mask[0])	     | (tcr_timer_en& ~mask[0]);
+	end
+end
+
+//---------------------------------TCMP0/1------------------------------
+
+reg[31:0] cmp0_pre,cmp1_pre;
+always @(*) begin 
+	cmp0_pre=TCMP0;
+	if(wr_tcmp0) begin 
+		cmp0_pre= (wdata & mask) |(TCMP0 & ~mask);
+	end 
+	cmp1_pre=TCMP1;
+	if(wr_tcmp1) begin 
+		cmp1_pre= (wdata &mask)	|(TCMP1 & ~mask);
+	end	
+end
+//---------------------------------TIER---------------------------------
+reg tier_pre;
+always @(*) begin 
+	tier_pre=TIER;
+	if(wr_tier) begin 
+		tier_pre=(wdata[0] & mask[0]) |(TIER & ~mask[0]);
+	end 
+end
+//------------------------------THCSR------------------------------------
+reg thcsr_halt_pre;
+reg thcsr_halt_req;
+always @(*) begin 
+	thcsr_halt_pre =thcsr_halt_req;
+	if(wr_thcsr) begin 
+		thcsr_halt_pre =(wdata[0] & mask[0]) |( thcsr_halt_req &~mask[0]);
+	end
+end
+always @(posedge clk or negedge rst_n) begin 
+	if(!rst_n) begin 
+		tcr_div_val<=4'b1;
+		tcr_timer_en<=1'b0;
+		tcr_div_en<=1'b0;
+		TIER <=1'b0;
+		TCMP0<=32'hffff_ffff;
+		TCMP1<=32'hffff_ffff;
+		TDR0 <=32'h0000_0000;
+		TDR1 <=32'h0000_0000;
+		thcsr_halt_req<=1'b0;
+	end
+	else begin 
+		tcr_div_val<=div_val_pre_reg;
+		tcr_timer_en<=timer_en_pre;
+		tcr_div_en<=div_en_pre;
+		TIER<=tier_pre;
+		TCMP0 <=cmp0_pre;
+		TCMP1 <=cmp1_pre;
+		TDR0  <=tdr0_pre;
+		TDR1  <=tdr1_pre;
+		thcsr_halt_req <= thcsr_halt_pre;
+	end
+end	
+wire thcsr_halt_ack =dbg_mode && thcsr_halt_pre;
+//--------------------------READ DATA---------------------------------------
+reg [31:0] reg_rdata;
+always @(*) begin 
+	reg_rdata=32'h00;
+	if(rd_en) begin 
+		case(addr) 
+			TCR_ADDR: begin 
+				reg_rdata={20'b0,tcr_div_val,6'b0,tcr_div_en,tcr_timer_en};
+			end
+			TDR0_ADDR:begin  
+				reg_rdata=cnt[31:0];
+			end
+			TDR1_ADDR: begin  
+				reg_rdata=cnt[63:32];
+			end
+			TCMP0_ADDR:  begin
+				reg_rdata=TCMP0;
+			end
+			TCMP1_ADDR: begin 
+				reg_rdata=TCMP1;
+			end
+			TIER_ADDR:  begin
+				reg_rdata={31'b0,TIER};
+			end
+			TISR_ADDR:  begin
+				reg_rdata={31'b0,int_st};
+			end
+			THCSR_ADDR:  begin
+				reg_rdata={30'b0,thcsr_halt_ack,thcsr_halt_req};
+			end
+			
+			default:  begin
+				reg_rdata=32'b0;
+			end
+			
+		endcase
+	end
+	else begin 
+		reg_rdata=32'h0000_0000;
+	end
+end
+assign rdata=reg_rdata;
+assign div_en=tcr_div_en;
+assign div_val=tcr_div_val;
+assign halt_req=thcsr_halt_req;
+assign timer_en=tcr_timer_en;
+//assign halt_ack=dbg_mode && thcsr_halt_req;
+assign int_en=TIER;
+assign int_clr= wr_tisr && wdata[0] && int_st;
+assign int_set=(cnt[63:0] == {TCMP1,TCMP0});
+endmodule
+
+
+
+
+
+
+
+
+
+
+

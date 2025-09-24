@@ -1,0 +1,136 @@
+# vsim -coverage -l apb_slave_verify.log -c test_bench -voptargs="+cover=bcesft" -assertdebug -do "coverage save -onexit apb_slave_verify.ucdb; log -r /*;run -all" 
+# Start time: 10:46:59 on Aug 22,2025
+# ** Note: (vsim-3813) Design is being optimized due to module recompilation...
+# ** Note: (vopt-143) Recognized 1 FSM in module "apb_slave(fast)".
+# //  Questa Intel Starter FPGA Edition-64
+# //  Version 2023.3 linux_x86_64 Jul 17 2023
+# //
+# //  Copyright 1991-2023 Mentor Graphics Corporation
+# //  All Rights Reserved.
+# //
+# //  QuestaSim and its associated documentation contain trade
+# //  secrets and commercial or financial information that are the property of
+# //  Mentor Graphics Corporation and are privileged, confidential,
+# //  and exempt from disclosure under the Freedom of Information Act,
+# //  5 U.S.C. Section 552. Furthermore, this information
+# //  is prohibited from disclosure under the Trade Secrets Act,
+# //  18 U.S.C. Section 1905.
+# //
+# Loading work.test_bench(fast)
+# coverage save -onexit apb_slave_verify.ucdb
+#  log -r /*
+# run -all
+# ====PAT NAME:apb_slave_verify=======
+# WAIT STATE R/W access
+# =========================
+# PASS:    TCMP0: actual value=32'h00000000
+# =========================
+# pready is high after 1 cycle penable is high
+# =========================
+# PASS:    TCMP1: actual value=32'h55555555
+# =========================
+# pready is high after 1 cycle penable is high
+# =========================
+# PASS:    TCMP0: actual value=32'haaaaaaaa
+# =========================
+# pready is high after 1 cycle penable is high
+# =========================
+# PASS:    TCMP1: actual value=32'hffffffff
+# =========================
+# =========================
+# PASS:        : actual value=32'h00000000
+# =========================
+# check penable=0
+# ==================
+# PASS: pready=0
+# ==================
+# =========================
+# PASS:    TCMP0: actual value=32'hffffffff
+# =========================
+# =========================
+# PASS:     TDR0: actual value=32'h00000000
+# =========================
+# =========================
+# PASS:     TDR0: actual value=32'h00000000
+# =========================
+# =========================
+# PASS:    TCMP0: actual value=32'hffffffff
+# =========================
+# pready is high after 1 cycle penable is high
+# BYTE ACCESS check
+# =========================
+# PASS:    TCMP0: actual value=32'hffffffff
+# =========================
+# =========================
+# PASS:    TCMP0: actual value=32'hffffffa5
+# =========================
+# =========================
+# PASS:    TCMP1: actual value=32'hffff55ff
+# =========================
+# =========================
+# PASS:     TDR0: actual value=32'h0000ffff
+# =========================
+# =========================
+# PASS:    TCMP0: actual value=32'hffaaffa5
+# =========================
+# =========================
+# PASS:    TCMP0: actual value=32'hffbbffbb
+# =========================
+# =========================
+# PASS:    TCMP0: actual value=32'hffccccbb
+# =========================
+# =========================
+# PASS:    TCMP0: actual value=32'hffdddddd
+# =========================
+# =========================
+# PASS:    TCMP0: actual value=32'haadddddd
+# =========================
+# =========================
+# PASS:    TCMP1: actual value=32'hc5ff55c5
+# =========================
+# =========================
+# PASS:    TCMP0: actual value=32'hdadddadd
+# =========================
+# =========================
+# PASS:    TCMP0: actual value=32'h22dd1111
+# =========================
+# =========================
+# PASS:    TCMP0: actual value=32'haaaa55c5
+# =========================
+# =========================
+# PASS:     TDR0: actual value=32'h3333ff44
+# =========================
+# =========================
+# PASS:     TDR1: actual value=32'h33334400
+# =========================
+# =========================
+# PASS:     TDR1: actual value=32'haaaaaaaa
+# =========================
+# error handling check
+# ===========================
+# PASS: pslverr==1 when div_val >8 
+# ===========================
+# =========================
+# PASS:      TCR: actual value=32'h00000100
+# =========================
+# =========================
+# PASS:      TCR: actual value=32'h00000401
+# =========================
+# =========================
+# PASS:      TCR: actual value=32'h00000401
+# =========================
+# ===========================
+# PASS: pslverr==0 when tcr_div_val=0, pstrb[1]=0 
+# ===========================
+# ===========================
+# PASS: pslverr==1 when tcr_div_val=0, pstrb[0]=0 
+# ===========================
+# ===========================
+# PASS: pslverr==1 when tcr_div_val=0, pstrb[0]=0 
+# ===========================
+# test result is PASSED
+# ** Note: $finish    : ../tb/test_bench.v(30)
+#    Time: 15425 ns  Iteration: 0  Instance: /test_bench
+# Saving coverage database on exit...
+# End time: 10:47:00 on Aug 22,2025, Elapsed time: 0:00:01
+# Errors: 0, Warnings: 0

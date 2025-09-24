@@ -1,0 +1,120 @@
+parameter TDR0=12'h04;
+parameter TCR=12'h00;
+parameter TDR1=12'h08;
+task run_test();
+	begin
+	fail_num=0;
+	$display("====PAT NAME: TDR_access====");
+	#1
+	//reset value check 
+	$display("reset value check");
+	sys_rst_n=0;
+	@(posedge sys_clk);
+	sys_rst_n=1;
+	@(posedge sys_clk);
+	read_reg(TDR0);
+	check_value("TDR0",32'h00000000,tim_prdata);
+	@(posedge sys_clk);
+	read_reg(TDR1);
+	check_value("TDR1",32'h00000000,tim_prdata);
+	@(posedge sys_clk);
+	//R/W access 
+	$display("R/W access check");
+	tim_pstrb=4'b1111;
+	tim_pwdata=32'h0000_0000;
+	write_reg(TDR0);
+	@(posedge sys_clk);
+	read_reg(TDR0);
+	check_value("TDR0",32'h00000000,tim_prdata);
+	@(posedge sys_clk);
+	tim_pstrb=4'b1111;
+	tim_pwdata=32'hFFFF_FFFF;
+	write_reg(TDR0);
+	@(posedge sys_clk);
+	read_reg(TDR0);
+	check_value("TDR0",32'hffffffff,tim_prdata);
+	@(posedge sys_clk);
+	tim_pwdata=32'h5555_5555;
+	write_reg(TDR0);
+	@(posedge sys_clk);
+	read_reg(TDR0);
+	check_value("TDR0",32'h55555555,tim_prdata);
+	@(posedge sys_clk);
+	tim_pwdata=32'hAAAA_AAAA;
+	write_reg(TDR0);
+	@(posedge sys_clk);
+	read_reg(TDR0);
+	check_value("TDR0",32'hAAAAAAAA,tim_prdata);
+	@(posedge sys_clk);
+	tim_pwdata=32'h0000_0000;
+	write_reg(TDR1);
+	@(posedge sys_clk);
+	read_reg(TDR1);
+	check_value("TDR1",32'h00000000,tim_prdata);
+	@(posedge sys_clk);
+	tim_pstrb=4'b1111;
+	tim_pwdata=32'hFFFF_FFFF;
+	write_reg(TDR1);
+	@(posedge sys_clk);
+	read_reg(TDR1);
+	check_value("TDR1",32'hffffffff,tim_prdata);
+	@(posedge sys_clk);
+	tim_pwdata=32'h5555_5555;
+	write_reg(TDR1);
+	@(posedge sys_clk);
+	read_reg(TDR1);
+	check_value("TDR1",32'h55555555,tim_prdata);
+	@(posedge sys_clk);
+	tim_pwdata=32'hAAAA_AAAA;
+	write_reg(TDR1);
+	@(posedge sys_clk);
+	read_reg(TDR1);
+	check_value("TDR1",32'hAAAA_AAAA,tim_prdata);
+	@(posedge sys_clk);
+	// Write access when timer_en=0
+	$display("Write access when timer_en=1");
+	tim_pwdata=32'h00;
+	write_reg(TCR);
+	@(posedge sys_clk);
+	tim_pwdata=32'h0000_0000;
+	write_reg(TDR0);
+	@(posedge sys_clk);
+	tim_pwdata=32'hffff_ffff;
+	write_reg(TDR0);
+	@(posedge sys_clk);
+	read_reg(TDR0);
+	check_value("TDR0",32'hffffffff,tim_prdata);
+	@(posedge sys_clk);
+	write_reg(TCR);
+	@(posedge sys_clk);
+	tim_pwdata=32'hffff_ffff;
+	write_reg(TDR1);
+	@(posedge sys_clk);
+	read_reg(TDR1);
+	check_value("TDR1",32'hffffffff,tim_prdata);
+	// Check value of register when timer_en=1 changes to timer_en=0
+	$display("Check value of register when timer_en=1 changes to timer_en=0");
+	@(posedge sys_clk);
+	tim_pwdata=32'h01;
+	write_reg(TCR);
+	@(posedge sys_clk);
+	tim_pwdata=32'h00;
+	write_reg(TCR);
+	@(posedge sys_clk);
+	read_reg(TDR0);
+	check_value("TDR0",32'h00000000,tim_prdata);
+	@(posedge sys_clk);
+	write_reg(TCR);
+	@(posedge sys_clk);
+	read_reg(TDR1);
+	check_value("TDR1",32'h00000000,tim_prdata);
+
+
+	@(posedge sys_clk);
+	if(fail_num ==0) begin
+		$display("test result is FAILED");
+	end else begin 
+		$display("test result is PASSED");
+	end
+	end
+endtask

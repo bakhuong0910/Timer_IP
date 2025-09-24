@@ -1,0 +1,375 @@
+Coverage Report by instance with details
+
+=================================================================================
+=== Instance: /test_bench
+=== Design Unit: work.test_bench
+=================================================================================
+Branch Coverage:
+    Enabled Coverage              Bins      Hits    Misses  Coverage
+    ----------------              ----      ----    ------  --------
+    Branches                        48        26        22    54.16%
+
+================================Branch Details================================
+
+Branch Coverage for instance /test_bench
+
+    Line         Item                      Count     Source 
+    ----         ----                      -----     ------ 
+  File ../tb/test_bench.v
+------------------------------------IF Branch------------------------------------
+    60                                       142     Count coming in to IF
+    60              1                        142             if(expected_value ==actual_value) begin
+    64              1                    ***0***             end else begin
+Branch totals: 1 hit of 2 branches = 50.00%
+
+
+  File run_test.v
+------------------------------------IF Branch------------------------------------
+    32                                         1     Count coming in to IF
+    32              1                          1     	@(posedge sys_clk);
+    36              1                    ***0***     	read_reg(THCSR);
+Branch totals: 1 hit of 2 branches = 50.00%
+
+------------------------------------IF Branch------------------------------------
+    60                                         1     Count coming in to IF
+    60              1                          1     	write_reg(TCR);
+    62              1                    ***0***     	tim_pwdata=32'h01;
+Branch totals: 1 hit of 2 branches = 50.00%
+
+------------------------------------IF Branch------------------------------------
+    62                                         1     Count coming in to IF
+    62              1                          1     	tim_pwdata=32'h01;
+    66              1                    ***0***     	write_reg(THCSR);
+Branch totals: 1 hit of 2 branches = 50.00%
+
+------------------------------------IF Branch------------------------------------
+    76                                         2     Count coming in to IF
+    76              1                          2     	@(posedge sys_clk);
+    78              1                    ***0***     	write_reg(TCMP0);
+Branch totals: 1 hit of 2 branches = 50.00%
+
+------------------------------------IF Branch------------------------------------
+    79                                         1     Count coming in to IF
+    79              1                    ***0***     	write_reg(TDR0);
+    81              1                          1     	tim_pwdata=32'h00;
+Branch totals: 1 hit of 2 branches = 50.00%
+
+------------------------------------IF Branch------------------------------------
+    88                                         1     Count coming in to IF
+    88              1                          1     	@(posedge sys_clk);
+    90              1                    ***0***     	@(posedge sys_clk);
+Branch totals: 1 hit of 2 branches = 50.00%
+
+------------------------------------IF Branch------------------------------------
+    90                                         1     Count coming in to IF
+    90              1                          1     	@(posedge sys_clk);
+    94              1                    ***0***     	@(posedge sys_clk);
+Branch totals: 1 hit of 2 branches = 50.00%
+
+------------------------------------IF Branch------------------------------------
+    99                                         1     Count coming in to IF
+    99              1                          1     	write_reg(TCR);
+    103             1                    ***0***     	@(posedge sys_clk);
+Branch totals: 1 hit of 2 branches = 50.00%
+
+------------------------------------IF Branch------------------------------------
+    107                                        1     Count coming in to IF
+    107             1                    ***0***     	read_reg(THCSR);
+    111             1                          1     	@(posedge sys_clk);
+Branch totals: 1 hit of 2 branches = 50.00%
+
+------------------------------------IF Branch------------------------------------
+    119                                        1     Count coming in to IF
+    119             1                    ***0***     	tim_pwdata=32'h0203;
+    121             1                          1     	@(posedge sys_clk);
+Branch totals: 1 hit of 2 branches = 50.00%
+
+------------------------------------IF Branch------------------------------------
+    122                                        1     Count coming in to IF
+    122             1                          1     	tim_pwdata=32'h01;
+    124             1                    ***0***     	@(posedge sys_clk);
+Branch totals: 1 hit of 2 branches = 50.00%
+
+------------------------------------IF Branch------------------------------------
+    132                                        1     Count coming in to IF
+    132             1                          1     	check_value("TDR0",32'h00000021,tim_prdata);
+    136             1                    ***0***     		$display("test result is FAILED");
+Branch totals: 1 hit of 2 branches = 50.00%
+
+------------------------------------IF Branch------------------------------------
+    133                                        1     Count coming in to IF
+    133             1                          1     	if(fail_num ==0) begin 
+    135             1                    ***0***     	end else begin 
+Branch totals: 1 hit of 2 branches = 50.00%
+
+------------------------------------IF Branch------------------------------------
+    152                                        1     Count coming in to IF
+Branch totals: 1 hit of 2 branches = 50.00%
+
+------------------------------------IF Branch------------------------------------
+    173                                        1     Count coming in to IF
+Branch totals: 1 hit of 2 branches = 50.00%
+
+------------------------------------IF Branch------------------------------------
+    235                                        1     Count coming in to IF
+Branch totals: 1 hit of 2 branches = 50.00%
+
+------------------------------------IF Branch------------------------------------
+    236                                        1     Count coming in to IF
+Branch totals: 1 hit of 2 branches = 50.00%
+
+------------------------------------IF Branch------------------------------------
+    276                                        1     Count coming in to IF
+Branch totals: 1 hit of 2 branches = 50.00%
+
+------------------------------------IF Branch------------------------------------
+    290                                        1     Count coming in to IF
+Branch totals: 1 hit of 2 branches = 50.00%
+
+------------------------------------IF Branch------------------------------------
+    304                                        1     Count coming in to IF
+Branch totals: 1 hit of 2 branches = 50.00%
+
+------------------------------------IF Branch------------------------------------
+    315                                        1     Count coming in to IF
+Branch totals: 1 hit of 2 branches = 50.00%
+
+
+Condition Coverage:
+    Enabled Coverage              Bins   Covered    Misses  Coverage
+    ----------------              ----      ----    ------  --------
+    Conditions                      11         1        10     9.09%
+
+================================Condition Details================================
+
+Condition Coverage for instance /test_bench --
+
+  File ../tb/test_bench.v
+----------------Focused Condition View-------------------
+Line       60 Item    1  (expected_value == actual_value)
+Condition totals: 0 of 1 input term covered = 0.00%
+
+                        Input Term   Covered  Reason for no coverage   Hint
+                       -----------  --------  -----------------------  --------------
+  (expected_value == actual_value)         N  '_0' not hit             Hit '_0'
+
+     Rows:       Hits  FEC Target                          Non-masking condition(s)      
+ ---------  ---------  --------------------                -------------------------     
+  Row   1:    ***0***  (expected_value == actual_value)_0  -                             
+  Row   2:         11  (expected_value == actual_value)_1  -                             
+
+
+----------------Focused Condition View-------------------
+Line       76 Item    1  (fail_num == 0)
+Condition totals: 0 of 1 input term covered = 0.00%
+
+       Input Term   Covered  Reason for no coverage   Hint
+      -----------  --------  -----------------------  --------------
+  (fail_num == 0)         N  '_0' not hit             Hit '_0'
+
+     Rows:       Hits  FEC Target            Non-masking condition(s)      
+ ---------  ---------  --------------------  -------------------------     
+  Row   1:    ***0***  (fail_num == 0)_0     -                             
+  Row   2:          1  (fail_num == 0)_1     -                             
+
+----------------Focused Condition View-------------------
+Line       79 Item    1  (fail_num != 0)
+Condition totals: 0 of 1 input term covered = 0.00%
+
+       Input Term   Covered  Reason for no coverage   Hint
+      -----------  --------  -----------------------  --------------
+  (fail_num != 0)         N  '_1' not hit             Hit '_1'
+
+     Rows:       Hits  FEC Target            Non-masking condition(s)      
+ ---------  ---------  --------------------  -------------------------     
+  Row   1:          1  (fail_num != 0)_0     -                             
+  Row   2:    ***0***  (fail_num != 0)_1     -                             
+
+
+----------------Focused Condition View-------------------
+Line       119 Item    1  (fail_num != 0)
+Condition totals: 0 of 1 input term covered = 0.00%
+
+       Input Term   Covered  Reason for no coverage   Hint
+      -----------  --------  -----------------------  --------------
+  (fail_num != 0)         N  '_1' not hit             Hit '_1'
+
+     Rows:       Hits  FEC Target            Non-masking condition(s)      
+ ---------  ---------  --------------------  -------------------------     
+  Row   1:          1  (fail_num != 0)_0     -                             
+  Row   2:    ***0***  (fail_num != 0)_1     -                             
+
+----------------Focused Condition View-------------------
+Line       122 Item    1  (fail_num == 0)
+Condition totals: 0 of 1 input term covered = 0.00%
+
+       Input Term   Covered  Reason for no coverage   Hint
+      -----------  --------  -----------------------  --------------
+  (fail_num == 0)         N  '_0' not hit             Hit '_0'
+
+     Rows:       Hits  FEC Target            Non-masking condition(s)      
+ ---------  ---------  --------------------  -------------------------     
+  Row   1:    ***0***  (fail_num == 0)_0     -                             
+  Row   2:          1  (fail_num == 0)_1     -                             
+
+----------------Focused Condition View-------------------
+Line       133 Item    1  (fail_num == 0)
+Condition totals: 0 of 1 input term covered = 0.00%
+
+       Input Term   Covered  Reason for no coverage   Hint
+      -----------  --------  -----------------------  --------------
+  (fail_num == 0)         N  '_0' not hit             Hit '_0'
+
+     Rows:       Hits  FEC Target            Non-masking condition(s)      
+ ---------  ---------  --------------------  -------------------------     
+  Row   1:    ***0***  (fail_num == 0)_0     -                             
+  Row   2:          1  (fail_num == 0)_1     -                             
+
+----------------Focused Condition View-------------------
+Line       152 Item    1  (fail_num == 0)
+Condition totals: 0 of 1 input term covered = 0.00%
+
+       Input Term   Covered  Reason for no coverage   Hint
+      -----------  --------  -----------------------  --------------
+  (fail_num == 0)         N  '_0' not hit             Hit '_0'
+
+     Rows:       Hits  FEC Target            Non-masking condition(s)      
+ ---------  ---------  --------------------  -------------------------     
+  Row   1:    ***0***  (fail_num == 0)_0     -                             
+  Row   2:          1  (fail_num == 0)_1     -                             
+
+----------------Focused Condition View-------------------
+Line       173 Item    1  (fail_num != 0)
+Condition totals: 0 of 1 input term covered = 0.00%
+
+       Input Term   Covered  Reason for no coverage   Hint
+      -----------  --------  -----------------------  --------------
+  (fail_num != 0)         N  '_1' not hit             Hit '_1'
+
+     Rows:       Hits  FEC Target            Non-masking condition(s)      
+ ---------  ---------  --------------------  -------------------------     
+  Row   1:          1  (fail_num != 0)_0     -                             
+  Row   2:    ***0***  (fail_num != 0)_1     -                             
+
+----------------Focused Condition View-------------------
+Line       235 Item    1  (fail_num == 0)
+Condition totals: 0 of 1 input term covered = 0.00%
+
+       Input Term   Covered  Reason for no coverage   Hint
+      -----------  --------  -----------------------  --------------
+  (fail_num == 0)         N  '_0' not hit             Hit '_0'
+
+     Rows:       Hits  FEC Target            Non-masking condition(s)      
+ ---------  ---------  --------------------  -------------------------     
+  Row   1:    ***0***  (fail_num == 0)_0     -                             
+  Row   2:          1  (fail_num == 0)_1     -                             
+
+----------------Focused Condition View-------------------
+Line       315 Item    1  (fail_num == 0)
+Condition totals: 0 of 1 input term covered = 0.00%
+
+       Input Term   Covered  Reason for no coverage   Hint
+      -----------  --------  -----------------------  --------------
+  (fail_num == 0)         N  '_0' not hit             Hit '_0'
+
+     Rows:       Hits  FEC Target            Non-masking condition(s)      
+ ---------  ---------  --------------------  -------------------------     
+  Row   1:    ***0***  (fail_num == 0)_0     -                             
+  Row   2:          1  (fail_num == 0)_1     -                             
+
+
+Statement Coverage:
+    Enabled Coverage              Bins      Hits    Misses  Coverage
+    ----------------              ----      ----    ------  --------
+    Statements                     426       388        38    91.07%
+
+================================Statement Details================================
+
+Statement Coverage for instance /test_bench --
+
+    Line         Item                      Count     Source 
+    ----         ----                      -----     ------ 
+  File ../tb/test_bench.v
+    65              1                     fail_num=fail_num+1;
+    66              1                     $display("=========================");
+    67              1                     $display("FAIL: %s: expected value=32'h%h, actual value=32'h%h",label,expected_value,actual_value);
+    68              1                     $display("=========================");
+    101             1             tim_paddr=addr;
+    102             1             tim_pwrite=1'b1;
+    103             1             tim_psel=0;
+    104             1             tim_penable=0;
+    105             1             @(posedge sys_clk);
+    106             1             tim_penable=1;
+    107             1             repeat(3) @(posedge sys_clk);
+    107             2     
+    108             1             tim_penable=0;
+    109             1             tim_psel=0;
+    110             1             tim_pwrite=0;
+    115             1             tim_paddr=addr;
+    116             1             tim_psel=0;
+    117             1             tim_penable=0;
+    118             1             @(posedge sys_clk);
+    119             1             tim_penable=1;
+    120             1             repeat(3) @(posedge sys_clk);
+    120             2     
+    121             1             tim_penable=0;
+    122             1             tim_psel=0;
+    123             1             tim_pwrite=0;
+Toggle Coverage:
+    Enabled Coverage              Bins      Hits    Misses  Coverage
+    ----------------              ----      ----    ------  --------
+    Toggles                        242       178        64    73.55%
+
+================================Toggle Details================================
+
+Toggle Coverage for instance /test_bench --
+
+                                              Node      1H->0L      0L->1H  "Coverage"
+                                              ---------------------------------------
+                                          dbg_mode           2           1      100.00 
+                                    fail_num[0-31]           0           0        0.00 
+                                           sys_clk          11          11      100.00 
+                                         sys_rst_n           7          11      100.00 
+                                           tim_int           2           2      100.00 
+                                    tim_paddr[0-1]           1           1      100.00 
+                                    tim_paddr[2-3]          11          11      100.00 
+                                      tim_paddr[4]           9           9      100.00 
+                                      tim_paddr[5]           2           2      100.00 
+                                    tim_paddr[6-8]           1           1      100.00 
+                                      tim_paddr[9]           2           2      100.00 
+                                  tim_paddr[10-11]           1           1      100.00 
+                                       tim_penable          11          11      100.00 
+                                     tim_prdata[0]          11          11      100.00 
+                                     tim_prdata[1]           8           8      100.00 
+                                   tim_prdata[2-3]           5           5      100.00 
+                                     tim_prdata[4]           4           4      100.00 
+                                     tim_prdata[5]           5           5      100.00 
+                                   tim_prdata[6-7]           4           4      100.00 
+                                  tim_prdata[8-11]           5           5      100.00 
+                                 tim_prdata[12-31]           4           4      100.00 
+                                        tim_pready          11          11      100.00 
+                                          tim_psel          11          11      100.00 
+                                       tim_pslverr           5           5      100.00 
+                                      tim_pstrb[0]           4           3      100.00 
+                                      tim_pstrb[1]           3           3      100.00 
+                                      tim_pstrb[2]           3           2      100.00 
+                                      tim_pstrb[3]           3           3      100.00 
+                                     tim_pwdata[0]          10          11      100.00 
+                                   tim_pwdata[1-2]          10          10      100.00 
+                                   tim_pwdata[3-4]           9           9      100.00 
+                                     tim_pwdata[5]           9          10      100.00 
+                                   tim_pwdata[6-7]           9           9      100.00 
+                                     tim_pwdata[8]           8           8      100.00 
+                                     tim_pwdata[9]          10          10      100.00 
+                                 tim_pwdata[10-31]           8           8      100.00 
+                                        tim_pwrite          11          11      100.00 
+
+Total Node Count     =        121 
+Toggled Node Count   =         89 
+Untoggled Node Count =         32 
+
+Toggle Coverage      =      73.55% (178 of 242 bins)
+
+
+Total Coverage By Instance (filtered view): 56.97%
+

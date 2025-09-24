@@ -1,0 +1,128 @@
+parameter TIER=12'h14;
+parameter TCMP0=12'h0C;
+parameter TCMP1=12'h10;
+parameter TCR=12'h00;
+parameter TDR0=12'h04;
+parameter TDR1=12'h08;
+parameter TISR=12'h18;
+task run_test();
+	begin 
+	fail_num=0;
+	$display("=====PAT NAME: TIER_access=======");
+	// reset value check 
+	$display("reset value check");
+	sys_rst_n=0;
+	@(posedge sys_clk);
+	sys_rst_n=1;
+	@(posedge sys_clk);
+	read_reg(TIER);
+	check_value("TIER",32'h00000000,tim_prdata);
+	//R/W access check 
+	@(posedge sys_clk);
+	$display("R/W access check");
+	tim_pstrb=4'b1111;
+	tim_pwdata=32'h0000_0000;
+	write_reg(TIER);
+	@(posedge sys_clk);
+	read_reg(TIER);
+	check_value("TIER",32'h00000000,tim_prdata);
+	@(posedge sys_clk);
+	tim_pstrb=4'b1111;
+	tim_pwdata=32'hffff_ffff;
+	write_reg(TIER);
+	@(posedge sys_clk);
+	read_reg(TIER);
+	check_value("TIER",32'h00000001,tim_prdata);
+	@(posedge sys_clk);
+	tim_pstrb=4'b1111;
+	tim_pwdata=32'h5555_5555;
+	write_reg(TIER);
+	@(posedge sys_clk);
+	read_reg(TIER);
+	check_value("TIER",32'h00000001,tim_prdata);
+	@(posedge sys_clk);
+	tim_pstrb=4'b1111;
+	tim_pwdata=32'hAAAA_AAAA;
+	write_reg(TIER);
+	@(posedge sys_clk);
+	read_reg(TIER);
+	check_value("TIER",32'h00000000,tim_prdata);
+	@(posedge sys_clk);
+	tim_pwdata=32'h01;
+	write_reg(TIER);
+	// R/W check when pstrb[0]=0
+	@(posedge sys_clk);
+	tim_pstrb=4'b1110;
+	tim_pwdata=32'h01;
+	write_reg(TIER);
+	@(posedge sys_clk);
+	read_reg(TIER);
+	check_value(TIER,32'h0000_0001,tim_prdata);
+	@(posedge sys_clk);
+	tim_pstrb=4'b1111;
+	tim_pwdata=32'h00;
+	write_reg(TIER);
+	@(posedge sys_clk);
+	tim_pstrb=4'b0000;
+	tim_pwdata=32'h01;
+	write_reg(TIER);
+	@(posedge sys_clk);
+	check_value(TIER,32'h00,tim_prdata);
+
+	@(posedge sys_clk);
+	// check enable int_en
+	tim_pstrb=4'b1111;
+	$display("check enable int_en");
+	tim_pwdata =32'h01;
+	write_reg(TIER);
+	@(posedge sys_clk);
+	tim_pwdata=32'h0303;
+	write_reg(TCR);
+	@(posedge sys_clk);
+	tim_pwdata=32'h0000_0000;
+	write_reg(TDR0);
+	write_reg(TDR1);
+	write_reg(TCMP1);
+	@(posedge sys_clk);
+	tim_pwdata=32'h0000_0005;
+	write_reg(TCMP0);
+	repeat(12) @(posedge sys_clk);
+	if(tim_int !=1'b1) begin 
+		$display("===========================");
+		$display("FAIL: expected tim_int=1'b1, actual tim_int=%b",tim_int);
+		$display("===========================");
+	end else begin 
+		$display("===========================");
+		$display("PASS: actual tim_int=%b",tim_int);
+		$display("===========================");
+	end
+	@(posedge sys_clk);
+	// check prohibited write handling 
+	$display("check prohibited write handling");
+	tim_pwdata=32'h00;
+	write_reg(TIER);
+	@(posedge sys_clk);
+	write_reg(TDR0);
+	@(posedge sys_clk);
+	if(tim_int ==1'b1 ) begin 
+		$display("===========================");
+		$display("FAIL: expected tim_int=1'b1,  actual tim_int=1'b%b,",tim_int);
+		$display("===========================");
+	end else begin 
+		$display("===========================");
+		$display("PASS: actual tim_int=%b, ",tim_int);
+		$display("===========================");
+	end
+	read_reg(TISR);
+	check_value("TISR",32'h0000_0000,tim_prdata);
+
+	
+
+
+	if(fail_num==0) begin 
+		$display("test result is PASSED");
+	end else begin 
+		$display("test result is FAILED");
+	end
+	end 
+endtask

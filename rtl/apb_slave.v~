@@ -1,0 +1,84 @@
+module apb_slave
+(
+	
+	input wire  pclk,prst_n,
+	input wire psel,penable,pwrite,
+	input wire [31:0] pwdata,
+	input wire [3:0] pstrb,
+	output wire pready,
+	input wire [11:0] paddr,
+	output wire pslverr,
+	output wire  wr_en,rd_en,
+	input wire timer_en,
+	input wire div_en,
+	input wire [3:0] div_val
+);
+wire [3:0]div_val_check=pwdata[11:8];
+wire div_en_check=pwdata[1];
+wire [31:12] unused_pwdata=pwdata[31:12];
+wire [7:2]   unused_pwdata2=pwdata[7:2];
+wire 	     unused_pwdata0=pwdata[0];
+wire [3:2]   unused_pwdata3=pwdata[3:2];
+wire [1:0]   pstrb1=pstrb[3:2];
+reg[1:0] state, next_state;
+localparam IDLE=2'b00;
+localparam SETUP=2'b01;
+localparam ACCESS=2'b10;
+localparam TCR=12'h000;
+reg wait_done;
+
+wire access,tcr_div_val,tcr_div_en,div_val_error;
+always @(posedge pclk or negedge prst_n) begin 
+	if(!prst_n) begin 
+		state <= IDLE;
+	end else begin 
+		state<=next_state;
+	end 
+end 
+always @(*) begin
+       case(state)
+       		IDLE: begin 
+ 			if(psel)
+				next_state=SETUP;
+			else 
+				next_state=IDLE;
+		end
+		SETUP: begin 
+			if(!psel) 
+				next_state=IDLE;
+			else if(penable) 
+				next_state=ACCESS;
+			else 
+				next_state=SETUP;
+		end 
+		default: begin 
+			if(!wait_done) 
+				next_state=ACCESS;
+			else if(!psel)
+				next_state=IDLE;
+			else 
+				next_state=SETUP;
+		end 
+	endcase
+end	
+always @(posedge pclk or negedge prst_n) begin 
+	if(!prst_n) begin 
+		wait_done<=1'b0;
+	end else if(state!=ACCESS) begin 
+		wait_done<=1'b0;
+	end else if(!wait_done)  begin 
+			wait_done<=1'd1;
+	end
+		
+end
+
+assign access=(state==ACCESS) && penable;
+assign tcr_div_val=timer_en &&(access && pwrite && (paddr==TCR) &&pstrb[1] && (div_val_check !=div_val));
+assign tcr_div_en=timer_en && (access && pwrite && (paddr==TCR) && pstrb[0] && (div_en_check !=div_en));
+// error respone 
+assign div_val_error=(access&& pwrite && (paddr==TCR) && pstrb[1] &&( div_val_check > 4'd8));
+assign pready= access && wait_done;
+assign pslverr=  tcr_div_val|| tcr_div_en|| div_val_error ;
+assign wr_en=access && pready && !pslverr && pwrite;
+assign rd_en=access && pready && !pwrite;
+endmodule 

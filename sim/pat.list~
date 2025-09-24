@@ -1,0 +1,11 @@
+//reset_verify 
+//apb_slave_verify
+//TCR_access  
+//TDR_access
+TISR_access
+//TIER_access
+//THCSR_access
+//TCMP_access
+//COUNTER_verify
+//INTERRUPT_verify 
+//HALT_MODE_verify

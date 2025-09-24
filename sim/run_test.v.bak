@@ -1,0 +1,138 @@
+parameter TCR=12'h00;
+parameter TDR0=12'h04;
+parameter TDR1=12'h08;
+parameter TCMP0=12'hC;
+parameter TCMP1=12'h10;
+parameter TIER=12'h14;
+parameter TISR=12'h18;
+parameter THCSR=12'h1C;
+reg fail_num;
+task run_test();
+	begin 
+	fail_num=0;
+	$display("====PAT NAME:COUNTER_verify=======");
+	//enable count test
+	$display("enable count test");
+	sys_rst_n=0;
+	@(posedge sys_clk);
+	sys_rst_n=1;
+	@(posedge sys_clk);
+	tim_pstrb=4'b1111;
+	tim_pwdata=32'h0000_0403;	
+	write_reg(TCR);
+	repeat(13) @(posedge sys_clk);
+	read_reg(TDR0);
+	check_value("TDR0",32'h00000001,tim_prdata);
+	repeat(13) @(posedge sys_clk);
+	read_reg(TDR0);
+	check_value("TDR0",32'h00000002,tim_prdata);
+	@(posedge sys_clk);
+	sys_rst_n=0;
+	@(posedge sys_clk);
+	sys_rst_n=1;
+	@(posedge sys_clk);
+	tim_pstrb=4'b1111;
+	tim_pwdata=32'h0000_0000;
+	write_reg(TDR0);
+	write_reg(TDR1);
+	@(posedge sys_clk);
+	tim_pwdata=32'h0000_0503;	
+	write_reg(TCR);
+	repeat(29) @(posedge sys_clk);
+	read_reg(TDR0);
+	check_value("TDR0",32'h00000001,tim_prdata);
+	repeat(29)@(posedge sys_clk);
+	read_reg(TDR0);
+	check_value("TDR0",32'h00000002,tim_prdata);
+	@(posedge sys_clk);
+	sys_rst_n=0;
+	@(posedge sys_clk);
+	sys_rst_n=1;
+	@(posedge sys_clk);
+	tim_pstrb=4'b1111;
+	tim_pwdata=32'h0000_0000;
+	write_reg(TDR0);
+	write_reg(TDR1);
+	@(posedge sys_clk);
+	tim_pwdata=32'h0000_0603;	
+	write_reg(TCR);
+	repeat(61) @(posedge sys_clk);
+	read_reg(TDR0);
+	check_value("TDR0",32'h00000001,tim_prdata);
+	repeat(61)@(posedge sys_clk);
+	read_reg(TDR0);
+	check_value("TDR0",32'h00000002,tim_prdata);
+	// reset during counting 
+	$display("reset during counting");
+	repeat (2)@(posedge sys_clk);
+	sys_rst_n=0;
+	read_reg("TDR0");
+	check_value("TDR0",32'h00000000,tim_prdata);
+	@(posedge sys_clk);
+	sys_rst_n=0;
+	@(posedge sys_clk);
+	sys_rst_n=1;
+	@(posedge sys_clk);
+	tim_pstrb=4'b1111;
+	tim_pwdata=32'hffff_ffff;
+	write_reg(TDR0);
+	@(posedge sys_clk);
+	tim_pwdata=32'h0000_0000;
+	write_reg(TDR1);
+	@(posedge sys_clk);
+	tim_pwdata=32'h0000_0103;	
+	write_reg(TCR);
+	repeat(20) @(posedge sys_clk);
+	read_reg(TDR0);
+	check_value("TDR0",32'h0000000A,tim_prdata);
+
+
+
+	
+	if(fail_num !=1) begin 
+		$display("test result is PASSED");
+	end else begin 
+		$display("test result is FAILED");
+	end 
+	end
+endtask
+task write_reg(input [11:0] addr);
+	begin 
+	tim_paddr=addr;
+	tim_psel=1;
+	tim_penable=0;
+	tim_pwrite=1;
+	@(posedge sys_clk);
+	tim_penable=1;
+	repeat(3) @(posedge sys_clk);
+	tim_penable=0;
+	tim_psel=0;
+	tim_pwrite=0;
+	end
+endtask
+task read_reg(input [11:0] addr) ;
+	begin 
+	tim_paddr=addr;
+	tim_psel=1;
+	tim_penable=0;
+	@(posedge sys_clk);
+	tim_penable=1;
+	repeat(3) @(posedge sys_clk);
+	tim_psel=0;
+	tim_penable=0;
+	end 
+endtask
+task check_value(input [63:0] label, input [31:0] expected_value, input [31:0] actual_value);
+	begin 
+	if(expected_value ==actual_value) begin
+		$display("=========================");
+		$display("PASS: %s: actual value=32'h%h",label,actual_value);
+		$display("=========================");
+	end else begin
+		fail_num=1;
+		$display("=========================");
+		$display("FAIL: %s: expected value=32'h%h, actual value=32'h%h",label,expected_value,actual_value);
+		$display("=========================");
+	end
+	end
+endtask
